@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "814918680182",
+    "project_id": "perfectpose-b0b87",
+    "storage_bucket": "perfectpose-b0b87.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814918680182:android:50df2a039a8f26eea0e957",
+        "android_client_info": {
+          "package_name": "com.perfectpose.loginpg"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0VLkB20lU9veAt21R0Jke0YSxlve-M7Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
