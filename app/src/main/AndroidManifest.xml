@@ -28,6 +28,9 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".ExerciseActivity" />
 
+        <!-- ✅ ADDED -->
+        <activity android:name=".HomeActivity" />
+
         <activity
             android:name=".PoseActivity"
             android:screenOrientation="portrait" />

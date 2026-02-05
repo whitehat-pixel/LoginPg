@@ -12,22 +12,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btnPushup = findViewById(R.id.btnPushup);
-        Button btnSquat = findViewById(R.id.btnSquat);
-        Button btnLogout = findViewById(R.id.btnLogout);
+       // Button btnPushup = findViewById(R.id.btnPushup);
+      //  Button btnSquat = findViewById(R.id.btnSquat);
+      //  Button btnLogout = findViewById(R.id.btnLogout);
 
-        btnPushup.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, PoseActivity.class);
-            intent.putExtra("MODE", "PUSHUP");
-            startActivity(intent);
-        });
+       // btnPushup.setOnClickListener(v -> {
+        //    Intent intent = new Intent(MainActivity.this, PoseActivity.class);
+        //    intent.putExtra("MODE", "PUSHUP");
+       //     startActivity(intent);
+       // });
 
-        btnSquat.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, PoseActivity.class);
-            intent.putExtra("MODE", "SQUAT");
-            startActivity(intent);
-        });
+       // btnSquat.setOnClickListener(v -> {
+        //    Intent intent = new Intent(MainActivity.this, PoseActivity.class);
+        //    intent.putExtra("MODE", "SQUAT");
+        //    startActivity(intent);
+      //  });
 
-        btnLogout.setOnClickListener(v -> finish());
+       // btnLogout.setOnClickListener(v -> finish());
     }
 }

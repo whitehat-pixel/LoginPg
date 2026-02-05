@@ -1,12 +1,69 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:padding="16dp"
+    android:columnCount="2">
 
     <Button
-        android:id="@+id/btnSquat"
+        android:id="@+id/btnPushUps"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:text="Push Ups"
+        android:textAllCaps="false"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1"/>
+
+    <Button
+        android:id="@+id/btnSquats"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
         android:text="Squats"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+        android:textAllCaps="false"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1"/>
+
+    <Button
+        android:id="@+id/btnCrunches"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:text="Crunches"
+        android:textAllCaps="false"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1"/>
+
+    <Button
+        android:id="@+id/btnJumpingJacks"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:text="Jumping Jacks"
+        android:textAllCaps="false"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1"/>
+
+    <Button
+        android:id="@+id/btnPlank"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:text="Plank"
+        android:textAllCaps="false"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1"/>
+
+    <Button
+        android:id="@+id/btnLunges"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:text="Lunges"
+        android:textAllCaps="false"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1"/>
+
+</GridLayout>

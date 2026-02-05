@@ -1,6 +1,7 @@
 package com.perfectpose.loginpg;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
@@ -49,7 +50,7 @@ public class PoseActivity extends AppCompatActivity {
     ExecutorService cameraExecutor;
 
     boolean isSquatDown = false;
-    int squatCount = 0;
+    int sessionSquats = 0;
     long frameTime = 0;
 
     @Override
@@ -61,7 +62,6 @@ public class PoseActivity extends AppCompatActivity {
         txtReps = findViewById(R.id.txtReps);
 
         cameraExecutor = Executors.newSingleThreadExecutor();
-
         setupPoseLandmarker();
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
@@ -196,13 +196,22 @@ public class PoseActivity extends AppCompatActivity {
         }
 
         if (kneeAngle > 160 && isSquatDown) {
-            squatCount++;
             isSquatDown = false;
+            sessionSquats++;
+            saveSquat();
 
             runOnUiThread(() ->
-                    txtReps.setText("Squats: " + squatCount)
+                    txtReps.setText("Squats: " + sessionSquats)
             );
         }
+    }
+
+    private void saveSquat() {
+        SharedPreferences prefs =
+                getSharedPreferences("fitness_data", MODE_PRIVATE);
+
+        int total = prefs.getInt("squat_count", 0);
+        prefs.edit().putInt("squat_count", total + 1).apply();
     }
 
     private double calculateAngle(
@@ -219,24 +228,7 @@ public class PoseActivity extends AppCompatActivity {
         double magAB = Math.sqrt(abX * abX + abY * abY);
         double magCB = Math.sqrt(cbX * cbX + cbY * cbY);
 
-        double angle = Math.acos(dot / (magAB * magCB));
-        return Math.toDegrees(angle);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(
-            int requestCode,
-            @NonNull String[] permissions,
-            @NonNull int[] grantResults) {
-
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == CAMERA_PERMISSION_CODE &&
-                grantResults.length > 0 &&
-                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-            startCamera();
-        }
+        return Math.toDegrees(Math.acos(dot / (magAB * magCB)));
     }
 
     @Override

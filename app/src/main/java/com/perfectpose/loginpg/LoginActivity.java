@@ -30,7 +30,8 @@ public class LoginActivity extends AppCompatActivity {
                     etEmail.getText().toString(),
                     etPassword.getText().toString()
             ).addOnSuccessListener(r -> {
-                startActivity(new Intent(this, ExerciseActivity.class));
+                // ✅ ONLY CHANGE IS HERE
+                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                 finish();
             });
         });

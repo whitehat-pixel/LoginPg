@@ -27,7 +27,7 @@ public class SignupActivity extends AppCompatActivity {
                     etUser.getText().toString(),
                     etPass.getText().toString()
             ).addOnSuccessListener(r -> {
-                startActivity(new Intent(this, ExerciseActivity.class));
+                startActivity(new Intent(SignupActivity.this, HomeActivity.class));
                 finish();
             });
         });
