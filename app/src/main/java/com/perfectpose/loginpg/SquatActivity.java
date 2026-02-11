@@ -1,18 +1,23 @@
 package com.perfectpose.loginpg;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ExperimentalGetImage;
@@ -39,7 +44,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class PoseActivity extends AppCompatActivity {
+public class SquatActivity extends AppCompatActivity {
 
     private static final int CAMERA_PERMISSION_CODE = 1001;
 
@@ -53,16 +58,26 @@ public class PoseActivity extends AppCompatActivity {
     int sessionSquats = 0;
     long frameTime = 0;
 
+    // ---- Wrong Posture Variables ----
+    long wrongStartTime = 0;
+    boolean wrongPostureActive = false;
+    boolean dialogShowing = false;
+    int wrongAttemptCounter = 0;
+
+    ToneGenerator toneGenerator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pose);
+        setContentView(R.layout.activity_squat);
 
         previewView = findViewById(R.id.previewView);
         txtReps = findViewById(R.id.txtReps);
 
         cameraExecutor = Executors.newSingleThreadExecutor();
         setupPoseLandmarker();
+
+        toneGenerator = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -137,9 +152,7 @@ public class PoseActivity extends AppCompatActivity {
         Bitmap bitmap = yuvToBitmap(imageProxy);
         imageProxy.close();
 
-        MPImage mpImage =
-                new BitmapImageBuilder(bitmap).build();
-
+        MPImage mpImage = new BitmapImageBuilder(bitmap).build();
         poseLandmarker.detectAsync(mpImage, frameTime++);
     }
 
@@ -191,6 +204,7 @@ public class PoseActivity extends AppCompatActivity {
 
         double kneeAngle = calculateAngle(hip, knee, ankle);
 
+        // ---- ORIGINAL SQUAT LOGIC (UNCHANGED) ----
         if (kneeAngle < 100 && !isSquatDown) {
             isSquatDown = true;
         }
@@ -201,9 +215,63 @@ public class PoseActivity extends AppCompatActivity {
             saveSquat();
 
             runOnUiThread(() ->
-                    txtReps.setText("Squats: " + sessionSquats)
+                    txtReps.setText(String.valueOf(sessionSquats))
             );
         }
+
+        // ---- WRONG POSTURE DETECTION ----
+        if (kneeAngle >= 100 && kneeAngle <= 160) {
+
+            if (!wrongPostureActive) {
+                wrongStartTime = System.currentTimeMillis();
+                wrongPostureActive = true;
+            }
+
+            if (System.currentTimeMillis() - wrongStartTime > 1000 && !dialogShowing) {
+
+                wrongAttemptCounter++;
+
+                if (wrongAttemptCounter >= 2) {
+                    wrongAttemptCounter = 0;
+                    runOnUiThread(this::showWrongPostureDialog);
+                }
+            }
+
+        } else {
+            wrongPostureActive = false;
+        }
+    }
+
+    private void showWrongPostureDialog() {
+
+        dialogShowing = true;
+
+        toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP2, 200);
+
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_wrong_posture);
+        dialog.setCancelable(false);
+
+        Button btnShow = dialog.findViewById(R.id.btnShow);
+        Button btnContinue = dialog.findViewById(R.id.btnContinue);
+
+        btnShow.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(android.net.Uri.parse(
+                    "https://www.youtube.com/watch?v=aclHkVaku9U"));
+            startActivity(intent);
+            dialog.dismiss();
+            dialogShowing = false;
+        });
+
+        btnContinue.setOnClickListener(v -> {
+            dialog.dismiss();
+            dialogShowing = false;
+        });
+
+        dialog.show();
+
     }
 
     private void saveSquat() {
@@ -236,5 +304,6 @@ public class PoseActivity extends AppCompatActivity {
         super.onDestroy();
         if (poseLandmarker != null) poseLandmarker.close();
         cameraExecutor.shutdown();
+        if (toneGenerator != null) toneGenerator.release();
     }
 }

@@ -22,7 +22,7 @@ public class HomeActivity extends AppCompatActivity {
 
         if (btnSquat != null) {
             btnSquat.setOnClickListener(v ->
-                    startActivity(new Intent(HomeActivity.this, PoseActivity.class))
+                    startActivity(new Intent(HomeActivity.this, SquatActivity.class))
             );
         }
     }

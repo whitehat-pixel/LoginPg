@@ -14,11 +14,10 @@ public class ExerciseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
 
-        // Squat button
         btnSquat = findViewById(R.id.btnSquat);
 
         btnSquat.setOnClickListener(v -> {
-            Intent intent = new Intent(ExerciseActivity.this, PoseActivity.class);
+            Intent intent = new Intent(ExerciseActivity.this, SquatActivity.class);
             startActivity(intent);
         });
     }
